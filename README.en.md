@@ -1,6 +1,4 @@
-# 📜 props
-
-[![License](./_icon/license.svg)](https://opensource.org/licenses/MIT)
+# 📜 props    [![License](./_icon/license.svg)](https://opensource.org/licenses/MIT)
 
 **props** is a properties lib for [GoLang](https://golang.org) applications.
 

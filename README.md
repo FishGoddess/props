@@ -1,6 +1,4 @@
-# 📜 props
-
-[![License](./_icon/license.svg)](https://opensource.org/licenses/MIT)
+# 📜 props    [![License](./_icon/license.svg)](https://opensource.org/licenses/MIT)
 
 **props** 是一个用于解析 properties 配置文件的库，可以应用于所有的 [GoLang](https://golang.org) 应用程序中。
 
