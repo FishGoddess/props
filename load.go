@@ -1,30 +1,20 @@
-// Author: fish
-// Email: yezijie@bilibili.com
-// Created at 2020/11/12 18:01
+// Copyright 2021 Ye Zi Jie.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+//
+// Author: FishGoddess
+// Email: fishgoddess@qq.com
+// Created at 2021/07/04 23:00:16
 
 package props
 
 import (
-	"bytes"
 	"io"
 	"io/ioutil"
 )
 
-var (
-	cr = []byte{'\r'}
-	lf = []byte{'\n'}
-
-	keyValueSeparator = []byte{'='}
-	commentPrefix = []byte{'#'}
-)
-
-func Load(file string) (*Properties, error) {
-
-	data, err := ioutil.ReadFile(file)
-	if err != nil {
-		return nil, err
-	}
-	return parseBytes(data), nil
+func Load(data string) (*Properties, error) {
+	return parseFrom(data)
 }
 
 func LoadFrom(reader io.Reader) (*Properties, error) {
@@ -33,35 +23,14 @@ func LoadFrom(reader io.Reader) (*Properties, error) {
 	if err != nil {
 		return nil, err
 	}
-	return parseBytes(data), nil
+	return Load(string(data))
 }
 
-func parseBytes(data []byte) *Properties {
+func LoadFromFile(file string) (*Properties, error) {
 
-	properties := newProperties()
-	lines := bytes.Split(data, lf)
-	for _, line := range lines {
-		line = bytes.TrimSpace(line)
-		if !isComment(line) {
-			filledWithKv(properties, kvOf(line))
-		}
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
 	}
-	return properties
-}
-
-func isComment(line []byte) bool {
-	return bytes.HasPrefix(line, commentPrefix)
-}
-
-func kvOf(line []byte) [][]byte {
-	line = bytes.TrimSuffix(line, cr)
-	return bytes.SplitN(line, keyValueSeparator, 2)
-}
-
-func filledWithKv(properties *Properties, kv [][]byte) {
-	if len(kv) == 2 {
-		key := bytes.TrimSpace(kv[0])
-		value := bytes.TrimSpace(kv[1])
-		properties.data[string(key)] = string(value)
-	}
+	return Load(string(data))
 }
