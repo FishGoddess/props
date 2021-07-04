@@ -8,16 +8,23 @@
 
 package props
 
+import (
+	"io"
+	"os"
+)
+
 var (
 	emptyValue = (*Value)(nil)
 )
 
 type Properties struct {
+	keys []string
 	data map[string]*Value
 }
 
-func newProperties() *Properties {
+func NewProperties() *Properties {
 	return &Properties{
+		keys: make([]string, 0, 64),
 		data: make(map[string]*Value, 64),
 	}
 }
@@ -35,6 +42,7 @@ func (p *Properties) Set(key string, value string) bool {
 	if ok {
 		p.data[key] = oldValue.set(value)
 	} else {
+		p.keys = append(p.keys, key)
 		p.data[key] = newValue(value)
 	}
 	return true
@@ -52,4 +60,32 @@ func (p *Properties) SetNotExisted(key string, value string) bool {
 		return false
 	}
 	return p.Set(key, value)
+}
+
+func (p *Properties) Traverse(fn func(key string, value *Value) bool) {
+
+	for _, key := range p.keys {
+		if !fn(key, p.Get(key).clone()) {
+			break
+		}
+	}
+}
+
+func (p *Properties) Store() string {
+	return parseFromProperties(p)
+}
+
+func (p *Properties) StoreTo(writer io.Writer) error {
+	_, err := io.WriteString(writer, p.Store())
+	return err
+}
+
+func (p *Properties) StoreToFile(file string) error {
+
+	f, err := os.OpenFile(file, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return p.StoreTo(f)
 }

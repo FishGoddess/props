@@ -38,9 +38,9 @@ func kvOf(line string) (string, string, error) {
 	return strings.TrimSpace(kv[0]), strings.TrimSpace(strings.Trim(kv[1], cr)), nil
 }
 
-func parseFrom(str string) (*Properties, error) {
+func parseFromString(str string) (*Properties, error) {
 
-	properties := newProperties()
+	properties := NewProperties()
 
 	lines := strings.Split(str, lf)
 	for _, line := range lines {
@@ -61,4 +61,17 @@ func parseFrom(str string) (*Properties, error) {
 		properties.Set(key, value)
 	}
 	return properties, nil
+}
+
+func parseFromProperties(properties *Properties) string {
+
+	buffer := make([]byte, 0, 512)
+	properties.Traverse(func(key string, value *Value) bool {
+		buffer = append(buffer, key...)
+		buffer = append(buffer, keyValueSeparator...)
+		buffer = append(buffer, value.get()...)
+		buffer = append(buffer, lf...)
+		return true
+	})
+	return string(buffer)
 }

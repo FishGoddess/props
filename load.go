@@ -14,7 +14,7 @@ import (
 )
 
 func Load(data string) (*Properties, error) {
-	return parseFrom(data)
+	return parseFromString(data)
 }
 
 func LoadFrom(reader io.Reader) (*Properties, error) {

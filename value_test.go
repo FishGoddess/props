@@ -17,7 +17,7 @@ import (
 // prepareTestProperties prepares one properties for testing.
 func prepareTestProperties() *Properties {
 
-	properties := newProperties()
+	properties := NewProperties()
 	properties.Set("key", "value")
 	properties.Set("stringKey", "string")
 	properties.Set("stringsKey", "string1,string2,string3")

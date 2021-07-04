@@ -21,11 +21,25 @@ func newValue(data string) *Value {
 	return &Value{data: data}
 }
 
+func (v *Value) get() string {
+	if v != nil {
+		return v.data
+	}
+	return ""
+}
+
 func (v *Value) set(data string) *Value {
 	if v != nil {
 		v.data = data
 	}
 	return v
+}
+
+func (v *Value) clone() *Value {
+	if v == nil {
+		return nil
+	}
+	return newValue(v.data)
 }
 
 func (v *Value) Absent() bool {

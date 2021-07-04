@@ -15,7 +15,7 @@ import (
 // go test -v -cover -run=^TestPropertiesGet$
 func TestPropertiesGet(t *testing.T) {
 
-	properties := newProperties()
+	properties := NewProperties()
 	properties.Set("key", "value")
 
 	if value := properties.Get("notExistedKey"); !value.Absent() {
