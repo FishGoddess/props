@@ -13,10 +13,12 @@ import (
 	"io/ioutil"
 )
 
+// Load loads properties from string and returns an error if failed.
 func Load(data string) (*Properties, error) {
 	return parseFromString(data)
 }
 
+// LoadFrom loads properties from io.Reader and returns an error if failed.
 func LoadFrom(reader io.Reader) (*Properties, error) {
 
 	data, err := ioutil.ReadAll(reader)
@@ -26,6 +28,7 @@ func LoadFrom(reader io.Reader) (*Properties, error) {
 	return Load(string(data))
 }
 
+// LoadFromFile loads properties from file and returns an error if failed.
 func LoadFromFile(file string) (*Properties, error) {
 
 	data, err := ioutil.ReadFile(file)

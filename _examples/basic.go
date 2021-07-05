@@ -1,30 +1,11 @@
-# 📜 props
+// Copyright 2021 Ye Zi Jie.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+//
+// Author: FishGoddess
+// Email: fishgoddess@qq.com
+// Created at 2021/07/05 23:17:59
 
-[![Go Doc](_icons/godoc.svg)](https://pkg.go.dev/github.com/FishGoddess/props)
-[![License](_icons/license.svg)](https://opensource.org/licenses/MIT)
-[![License](_icons/build.svg)](_icons/build.svg)
-[![License](_icons/coverage.svg)](_icons/coverage.svg)
-
-**props** 是一个用于解析 properties 配置文件的库，可以应用于所有的 [GoLang](https://golang.org) 应用程序中。
-
-[Read me in English](./README.en.md)
-
-### ✏ 功能特性
-
-* 解析 properties 配置，提供多种类型转换方式，方便配置的类型转换
-* 使用默认值机制替代 ok 判断机制，代码更简洁
-* 支持从字符串、io.Reader、文件中加载 properties 数据
-* 支持将 properties 数据回写到字符串、io.Writer、文件中
-
-### 🔨 安装方式
-
-```bash
-$ go get -u github.com/FishGoddess/props
-```
-
-### 💡 参考案例
-
-```go
 package main
 
 import (
@@ -73,16 +54,3 @@ func main() {
 		return true // return true to keep traversing
 	})
 }
-```
-
-* [basic](./_examples/basic.go)
-* [load](./_examples/load.go)
-* [store](./_examples/store.go)
-
-### 👀 贡献者
-
-如果您觉得 logit 缺少您需要的功能，请不要犹豫，马上参与进来，发起一个 _**issue**_。
-
-### 🎁 使用 logit 的项目
-
-* 待更新。。。

@@ -14,21 +14,30 @@ import (
 )
 
 const (
-	cr = "\r"
-	lf = "\n"
+	cr = "\r" // Carriage return
+	lf = "\n" // Line break
 
-	commentPrefix     = "#"
-	keyValueSeparator = "="
+	commentPrefix     = "#" // The prefix of comment line
+	keyValueSeparator = "=" // The separator between key and value
 )
 
+// isBlank returns line is blank ling or not.
 func isBlank(line string) bool {
 	return line == ""
 }
 
+// isComment returns line is comment line or not.
 func isComment(line string) bool {
 	return strings.HasPrefix(line, commentPrefix)
 }
 
+// needToBeIgnored returns line needs to be ignored or not.
+func needToBeIgnored(line string) bool {
+	return isBlank(line) || isComment(line)
+}
+
+// kvOf parses key and value from line.
+// It returns an error if failed.
 func kvOf(line string) (string, string, error) {
 
 	kv := strings.SplitN(line, keyValueSeparator, 2)
@@ -38,6 +47,7 @@ func kvOf(line string) (string, string, error) {
 	return strings.TrimSpace(kv[0]), strings.TrimSpace(strings.Trim(kv[1], cr)), nil
 }
 
+// parseFromString parses properties from string and returns an error if failed.
 func parseFromString(str string) (*Properties, error) {
 
 	properties := NewProperties()
@@ -46,11 +56,7 @@ func parseFromString(str string) (*Properties, error) {
 	for _, line := range lines {
 
 		line = strings.TrimSpace(line)
-		if isBlank(line) {
-			continue
-		}
-
-		if isComment(line) {
+		if needToBeIgnored(line) {
 			continue
 		}
 
@@ -63,6 +69,7 @@ func parseFromString(str string) (*Properties, error) {
 	return properties, nil
 }
 
+// parseFromProperties parses string from properties.
 func parseFromProperties(properties *Properties) string {
 
 	buffer := make([]byte, 0, 512)
