@@ -1,6 +1,10 @@
-// Author: fish
-// Email: yezijie@bilibili.com
-// Created at 2020/11/13 11:36
+// Copyright 2021 Ye Zi Jie.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+//
+// Author: FishGoddess
+// Email: fishgoddess@qq.com
+// Created at 2021/07/04 23:00:16
 
 package props
 
@@ -40,7 +44,7 @@ func checkProperties(properties *Properties) error {
 
 	for i := 1; i <= 3; i++ {
 		index := strconv.Itoa(i)
-		if value, ok := data["key" + index]; !ok || value != "value" + index {
+		if value, ok := data["key"+index]; !ok || value.String("") != "value"+index {
 			return fmt.Errorf("value of key%s (%s) is wrong", index, value)
 		}
 	}
@@ -50,15 +54,9 @@ func checkProperties(properties *Properties) error {
 // go test -v -cover -run=^TestLoad$
 func TestLoad(t *testing.T) {
 
-	file, err := prepareTestFile()
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer file.Close()
+	data := "key1 = value1\r\n# comment...\nkey2= value2\nkey3=value3\r\n"
 
-	fileName := file.Name()
-	t.Log("test file is", fileName)
-	properties, err := Load(fileName)
+	properties, err := Load(data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -79,6 +77,27 @@ func TestLoadFrom(t *testing.T) {
 
 	t.Log("test file is", file.Name())
 	properties, err := LoadFrom(file)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err = checkProperties(properties); err != nil {
+		t.Fatal(err)
+	}
+}
+
+// go test -v -cover -run=^TestLoadFromFile$
+func TestLoadFromFile(t *testing.T) {
+
+	file, err := prepareTestFile()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer file.Close()
+
+	fileName := file.Name()
+	t.Log("test file is", fileName)
+	properties, err := LoadFromFile(fileName)
 	if err != nil {
 		t.Fatal(err)
 	}

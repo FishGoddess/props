@@ -1,195 +1,112 @@
-// Author: fish
-// Email: yezijie@bilibili.com
-// Created at 2020/11/12 17:02
+// Copyright 2021 Ye Zi Jie.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+//
+// Author: FishGoddess
+// Email: fishgoddess@qq.com
+// Created at 2021/07/04 23:00:16
 
 package props
 
 import (
-	"strconv"
-	"strings"
+	"io"
+	"os"
 )
 
+var (
+	// emptyValue is for getting a not existed key.
+	emptyValue = (*Value)(nil)
+)
+
+// Properties stores all entries in properties.
 type Properties struct {
-	data map[string]string
+
+	// keys stores all keys in properties in order.
+	keys []string
+
+	// data stores all entries inside.
+	data map[string]*Value
 }
 
-func newProperties() *Properties {
+// NewProperties returns a new properties for use.
+func NewProperties() *Properties {
 	return &Properties{
-		data: map[string]string{},
+		keys: make([]string, 0, 64),
+		data: make(map[string]*Value, 64),
 	}
 }
 
-func (p *Properties) Get(key string) (string, bool) {
-	value, ok := p.data[key]
-	return value, ok
+// Get returns the value of key.
+// You can convert value to basic types by using Value.
+func (p *Properties) Get(key string) *Value {
+	if value, ok := p.data[key]; ok {
+		return value
+	}
+	return emptyValue
 }
 
-func (p *Properties) GetString(key string, defaultValue string) string {
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
+// Set sets key and value to properties and returns true forever.
+// A new value will be added if key doesn't exist.
+// The old value will be replaced if key exists.
+func (p *Properties) Set(key string, value string) bool {
+
+	oldValue, ok := p.data[key]
+	if ok {
+		p.data[key] = oldValue.set(value)
+	} else {
+		p.keys = append(p.keys, key)
+		p.data[key] = newValue(value)
 	}
-	return value
+	return true
 }
 
-func (p *Properties) GetStrings(key string, separator string, defaultValue []string) []string {
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
+// SetExisted sets key-value only if the key exists.
+// If not, it will return false.
+func (p *Properties) SetExisted(key string, value string) bool {
+	if _, ok := p.data[key]; !ok {
+		return false
 	}
-	return strings.Split(value, separator)
+	return p.Set(key, value)
 }
 
-func (p *Properties) GetInt(key string, defaultValue int) int {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
+// SetNotExisted sets key-value only if the key doesn't exist.
+// If exists, it will return false.
+func (p *Properties) SetNotExisted(key string, value string) bool {
+	if _, ok := p.data[key]; ok {
+		return false
 	}
+	return p.Set(key, value)
+}
 
-	result, err := strconv.Atoi(value)
+// Traverse passes all entries in properties to fn.
+// Stop traversing by returning false in fn.
+func (p *Properties) Traverse(fn func(key string, value *Value) bool) {
+
+	for _, key := range p.keys {
+		if !fn(key, p.Get(key).clone()) {
+			break
+		}
+	}
+}
+
+// Store stores p to a string.
+func (p *Properties) Store() string {
+	return parseFromProperties(p)
+}
+
+// StoreTo stores p to io.Writer.
+func (p *Properties) StoreTo(writer io.Writer) error {
+	_, err := io.WriteString(writer, p.Store())
+	return err
+}
+
+// StoreToFile stores p to file.
+func (p *Properties) StoreToFile(file string) error {
+
+	f, err := os.OpenFile(file, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0644)
 	if err != nil {
-		return defaultValue
+		return err
 	}
-	return result
-}
-
-func (p *Properties) GetInt8(key string, defaultValue int8) int8 {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
-	}
-
-	result, err := strconv.ParseInt(value, 10, 8)
-	if err != nil {
-		return defaultValue
-	}
-	return int8(result)
-}
-
-func (p *Properties) GetInt16(key string, defaultValue int16) int16 {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
-	}
-
-	result, err := strconv.ParseInt(value, 10, 16)
-	if err != nil {
-		return defaultValue
-	}
-	return int16(result)
-}
-
-func (p *Properties) GetInt32(key string, defaultValue int32) int32 {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
-	}
-
-	result, err := strconv.ParseInt(value, 10, 32)
-	if err != nil {
-		return defaultValue
-	}
-	return int32(result)
-}
-
-func (p *Properties) GetInt64(key string, defaultValue int64) int64 {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
-	}
-
-	result, err := strconv.ParseInt(value, 10, 64)
-	if err != nil {
-		return defaultValue
-	}
-	return result
-}
-
-func (p *Properties) GetUint8(key string, defaultValue uint8) uint8 {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
-	}
-
-	result, err := strconv.ParseUint(value, 10, 8)
-	if err != nil {
-		return defaultValue
-	}
-	return uint8(result)
-}
-
-func (p *Properties) GetUint16(key string, defaultValue uint16) uint16 {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
-	}
-
-	result, err := strconv.ParseUint(value, 10, 16)
-	if err != nil {
-		return defaultValue
-	}
-	return uint16(result)
-}
-
-func (p *Properties) GetUint32(key string, defaultValue uint32) uint32 {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
-	}
-
-	result, err := strconv.ParseUint(value, 10, 32)
-	if err != nil {
-		return defaultValue
-	}
-	return uint32(result)
-}
-
-func (p *Properties) GetUint64(key string, defaultValue uint64) uint64 {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
-	}
-
-	result, err := strconv.ParseUint(value, 10, 64)
-	if err != nil {
-		return defaultValue
-	}
-	return result
-}
-
-func (p *Properties) GetFloat32(key string, defaultValue float32) float32 {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
-	}
-
-	result, err := strconv.ParseFloat(value, 32)
-	if err != nil {
-		return defaultValue
-	}
-	return float32(result)
-}
-
-func (p *Properties) GetFloat64(key string, defaultValue float64) float64 {
-
-	value, ok := p.Get(key)
-	if !ok {
-		return defaultValue
-	}
-
-	result, err := strconv.ParseFloat(value, 64)
-	if err != nil {
-		return defaultValue
-	}
-	return result
+	defer f.Close()
+	return p.StoreTo(f)
 }

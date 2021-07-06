@@ -1,30 +1,11 @@
-# 📜 props
+// Copyright 2021 Ye Zi Jie.  All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+//
+// Author: FishGoddess
+// Email: fishgoddess@qq.com
+// Created at 2021/07/05 23:17:59
 
-[![Go Doc](_icons/godoc.svg)](https://pkg.go.dev/github.com/FishGoddess/props)
-[![License](_icons/license.svg)](https://opensource.org/licenses/MIT)
-[![License](_icons/build.svg)](_icons/build.svg)
-[![License](_icons/coverage.svg)](_icons/coverage.svg)
-
-**props** is a properties lib for [GoLang](https://golang.org) applications.
-
-[阅读中文版的 Read me](./README.md)
-
-### ✏ Features
-
-* Parsing properties configurations, type conversion supports
-* Using default value mechanism to instead of ok-pattern, which is more elegant
-* Load properties from string/io.Reader/file
-* Store properties to string/io.Writer/file
-
-### 🔨 Installation
-
-```bash
-$ go get -u github.com/FishGoddess/props
-```
-
-### 💡 Examples
-
-```go
 package main
 
 import (
@@ -63,7 +44,7 @@ func main() {
 	// Now check what we got
 	fmt.Printf("db.user is %s\n", dbUser)                  // output: db.user is props
 	fmt.Printf("web.port is %d\n", webPort)                // output: web.port is 8080
-	fmt.Printf("web.directories is %+v\n", webDirectories) // output: web.directories is [html  css  js]
+	fmt.Printf("web.directories is %+v\n", webDirectories) // output: web.directories is [html css js]
 	fmt.Printf("notExistedKey is %d\n", notExisted)        // output: notExistedKey is 123
 	fmt.Printf("notExistedKey is absent? %+v\n", absent)   // output: notExistedKey is absent? true
 
@@ -73,16 +54,3 @@ func main() {
 		return true // return true to keep traversing
 	})
 }
-```
-
-* [basic](./_examples/basic.go)
-* [load](./_examples/load.go)
-* [store](./_examples/store.go)
-
-### 👀 Contributors
-
-If you find that something is not working as expected please open an _**issue**_.
-
-### 🎁 Projects using props
-
-* Waiting for updating...
