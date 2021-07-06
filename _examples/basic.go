@@ -25,7 +25,7 @@ func main() {
 	//
 	//    # web properties
 	//    web.port = 8080
-	//    web.directories = html, css, js
+	//    web.directories = html,css,js
 	properties, err := props.LoadFromFile("basic.properties")
 	if err != nil {
 		panic(err)
