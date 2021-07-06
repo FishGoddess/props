@@ -37,11 +37,11 @@ Package props provides an easy way to use foundation for your properties operati
 	absent := properties.Get("notExistedKey").Absent()
 
 	// Now check what we got
-	fmt.Printf("db.user is %s\n", dbUser) // output: db.user is props
-	fmt.Printf("web.port is %d\n", webPort) // output: web.port is 8080
+	fmt.Printf("db.user is %s\n", dbUser)                  // output: db.user is props
+	fmt.Printf("web.port is %d\n", webPort)                // output: web.port is 8080
 	fmt.Printf("web.directories is %+v\n", webDirectories) // output: web.directories is [html  css  js]
-	fmt.Printf("notExistedKey is %d\n", notExisted) // output: notExistedKey is 123
-	fmt.Printf("notExistedKey is absent? %+v\n", absent) // output: notExistedKey is absent? true
+	fmt.Printf("notExistedKey is %d\n", notExisted)        // output: notExistedKey is 123
+	fmt.Printf("notExistedKey is absent? %+v\n", absent)   // output: notExistedKey is absent? true
 
 	// Also, we provide a way to get all entries in properties
 	properties.Traverse(func(key string, value *props.Value) bool {
