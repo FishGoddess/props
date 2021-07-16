@@ -44,7 +44,7 @@ func main() {
 	//
 	//    # web properties
 	//    web.port = 8080
-	//    web.directories = html, css, js
+	//    web.directories = html,css,js
 	properties, err := props.LoadFromFile("basic.properties")
 	if err != nil {
 		panic(err)
@@ -63,7 +63,7 @@ func main() {
 	// Now check what we got
 	fmt.Printf("db.user is %s\n", dbUser)                  // output: db.user is props
 	fmt.Printf("web.port is %d\n", webPort)                // output: web.port is 8080
-	fmt.Printf("web.directories is %+v\n", webDirectories) // output: web.directories is [html  css  js]
+	fmt.Printf("web.directories is %+v\n", webDirectories) // output: web.directories is [html css js]
 	fmt.Printf("notExistedKey is %d\n", notExisted)        // output: notExistedKey is 123
 	fmt.Printf("notExistedKey is absent? %+v\n", absent)   // output: notExistedKey is absent? true
 
