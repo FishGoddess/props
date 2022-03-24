@@ -115,5 +115,5 @@ package props // import "github.com/FishGoddess/props"
 
 const (
 	// Version is the version string representation of props.
-	Version = "v0.2.0"
+	Version = "v0.3.0-alpha"
 )

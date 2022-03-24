@@ -7,6 +7,8 @@ package props
 import (
 	"strconv"
 	"strings"
+
+	"github.com/FishGoddess/props/pkg/convert"
 )
 
 // Value stores the data of key in properties.
@@ -28,7 +30,7 @@ func (v *Value) get() string {
 	return ""
 }
 
-// set set data to Value and returns itself.
+// set sets data to Value and returns itself.
 func (v *Value) set(data string) *Value {
 	if v != nil {
 		v.data = data
@@ -62,7 +64,6 @@ func (v *Value) String(defaultValue string) string {
 
 // Int returns data as int type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Int(defaultValue int) int {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -76,7 +77,6 @@ func (v *Value) Int(defaultValue int) int {
 
 // Int8 returns data as int8 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Int8(defaultValue int8) int8 {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -90,7 +90,6 @@ func (v *Value) Int8(defaultValue int8) int8 {
 
 // Int16 returns data as int16 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Int16(defaultValue int16) int16 {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -104,7 +103,6 @@ func (v *Value) Int16(defaultValue int16) int16 {
 
 // Int32 returns data as int32 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Int32(defaultValue int32) int32 {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -118,7 +116,6 @@ func (v *Value) Int32(defaultValue int32) int32 {
 
 // Int64 returns data as int64 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Int64(defaultValue int64) int64 {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -132,7 +129,6 @@ func (v *Value) Int64(defaultValue int64) int64 {
 
 // Uint returns data as uint type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Uint(defaultValue uint) uint {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -146,7 +142,6 @@ func (v *Value) Uint(defaultValue uint) uint {
 
 // Uint8 returns data as uint8 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Uint8(defaultValue uint8) uint8 {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -160,7 +155,6 @@ func (v *Value) Uint8(defaultValue uint8) uint8 {
 
 // Uint16 returns data as uint16 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Uint16(defaultValue uint16) uint16 {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -174,7 +168,6 @@ func (v *Value) Uint16(defaultValue uint16) uint16 {
 
 // Uint32 returns data as uint32 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Uint32(defaultValue uint32) uint32 {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -188,7 +181,6 @@ func (v *Value) Uint32(defaultValue uint32) uint32 {
 
 // Uint64 returns data as uint64 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Uint64(defaultValue uint64) uint64 {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -202,7 +194,6 @@ func (v *Value) Uint64(defaultValue uint64) uint64 {
 
 // Float32 returns data as float32 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Float32(defaultValue float32) float32 {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -216,7 +207,6 @@ func (v *Value) Float32(defaultValue float32) float32 {
 
 // Float64 returns data as float64 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Float64(defaultValue float64) float64 {
-
 	if v.Absent() {
 		return defaultValue
 	}
@@ -238,12 +228,11 @@ func (v *Value) Strings(separator string, defaultValue []string) []string {
 
 // Ints returns data as []int type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Ints(separator string, defaultValue []int) []int {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToInts(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Ints()
 	if err != nil {
 		return defaultValue
 	}
@@ -252,12 +241,11 @@ func (v *Value) Ints(separator string, defaultValue []int) []int {
 
 // Int8s returns data as []int8 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Int8s(separator string, defaultValue []int8) []int8 {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToInt8s(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Int8s()
 	if err != nil {
 		return defaultValue
 	}
@@ -266,12 +254,11 @@ func (v *Value) Int8s(separator string, defaultValue []int8) []int8 {
 
 // Int16s returns data as []int16 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Int16s(separator string, defaultValue []int16) []int16 {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToInt16s(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Int16s()
 	if err != nil {
 		return defaultValue
 	}
@@ -280,12 +267,11 @@ func (v *Value) Int16s(separator string, defaultValue []int16) []int16 {
 
 // Int32s returns data as []int32 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Int32s(separator string, defaultValue []int32) []int32 {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToInt32s(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Int32s()
 	if err != nil {
 		return defaultValue
 	}
@@ -294,12 +280,11 @@ func (v *Value) Int32s(separator string, defaultValue []int32) []int32 {
 
 // Int64s returns data as []int64 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Int64s(separator string, defaultValue []int64) []int64 {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToInt64s(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Int64s()
 	if err != nil {
 		return defaultValue
 	}
@@ -308,12 +293,11 @@ func (v *Value) Int64s(separator string, defaultValue []int64) []int64 {
 
 // Uints returns data as []uint type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Uints(separator string, defaultValue []uint) []uint {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToUints(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Uints()
 	if err != nil {
 		return defaultValue
 	}
@@ -322,12 +306,11 @@ func (v *Value) Uints(separator string, defaultValue []uint) []uint {
 
 // Uint8s returns data as []uint8 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Uint8s(separator string, defaultValue []uint8) []uint8 {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToUint8s(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Uint8s()
 	if err != nil {
 		return defaultValue
 	}
@@ -336,12 +319,11 @@ func (v *Value) Uint8s(separator string, defaultValue []uint8) []uint8 {
 
 // Uint16s returns data as []uint16 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Uint16s(separator string, defaultValue []uint16) []uint16 {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToUint16s(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Uint16s()
 	if err != nil {
 		return defaultValue
 	}
@@ -350,12 +332,11 @@ func (v *Value) Uint16s(separator string, defaultValue []uint16) []uint16 {
 
 // Uint32s returns data as []uint32 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Uint32s(separator string, defaultValue []uint32) []uint32 {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToUint32s(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Uint32s()
 	if err != nil {
 		return defaultValue
 	}
@@ -364,12 +345,11 @@ func (v *Value) Uint32s(separator string, defaultValue []uint32) []uint32 {
 
 // Uint64s returns data as []uint64 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Uint64s(separator string, defaultValue []uint64) []uint64 {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToUint64s(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Uint64s()
 	if err != nil {
 		return defaultValue
 	}
@@ -378,12 +358,11 @@ func (v *Value) Uint64s(separator string, defaultValue []uint64) []uint64 {
 
 // Float32s returns data as []float32 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Float32s(separator string, defaultValue []float32) []float32 {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToFloat32s(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Float32s()
 	if err != nil {
 		return defaultValue
 	}
@@ -392,12 +371,11 @@ func (v *Value) Float32s(separator string, defaultValue []float32) []float32 {
 
 // Float64s returns data as []int64 type and defaultValue will be returned if data is absent or something wrong happens.
 func (v *Value) Float64s(separator string, defaultValue []float64) []float64 {
-
 	if v.Absent() {
 		return defaultValue
 	}
 
-	result, err := convertToFloat64s(strings.Split(v.data, separator))
+	result, err := convert.Strings(strings.Split(v.data, separator)).Float64s()
 	if err != nil {
 		return defaultValue
 	}
