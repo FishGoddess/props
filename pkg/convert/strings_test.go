@@ -1,26 +1,21 @@
-// Copyright 2021 Ye Zi Jie.  All rights reserved.
+// Copyright 2022 FishGoddess.  All rights reserved.
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
-//
-// Author: FishGoddess
-// Email: fishgoddess@qq.com
-// Created at 2021/07/07 01:20:30
 
-package props
+package convert
 
 import "testing"
 
-// go test -v -cover -run=^TestConvertToInts$
-func TestConvertToInts(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToInts(strs)
+// go test -v -cover -run=^TestStringsInts$
+func TestStringsInts(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Ints()
 	if err == nil {
 		t.Fatalf("convertToInts returns wrong err of strs %+v", strs)
 	}
 
-	strs = []string{"1", "2", "3"}
-	result, err = convertToInts(strs)
+	strs = Strings([]string{"1", "2", "3"})
+	result, err = strs.Ints()
 	if err != nil {
 		t.Fatalf("convertToInts returns wrong err of strs %+v", strs)
 	}
@@ -33,17 +28,16 @@ func TestConvertToInts(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToInt8s$
-func TestConvertToInt8s(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToInt8s(strs)
+// go test -v -cover -run=^TestStringsInt8s$
+func TestStringsInt8s(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Int8s()
 	if err == nil {
 		t.Fatalf("convertToInt8s returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToInt8s(strs)
+	result, err = strs.Int8s()
 	if err != nil {
 		t.Fatalf("convertToInt8s returns wrong err of strs %+v", strs)
 	}
@@ -56,17 +50,16 @@ func TestConvertToInt8s(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToInt16s$
-func TestConvertToInt16s(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToInt16s(strs)
+// go test -v -cover -run=^TestStringsInt16s$
+func TestStringsInt16s(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Int16s()
 	if err == nil {
 		t.Fatalf("convertToInt16s returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToInt16s(strs)
+	result, err = strs.Int16s()
 	if err != nil {
 		t.Fatalf("convertToInt16s returns wrong err of strs %+v", strs)
 	}
@@ -79,17 +72,16 @@ func TestConvertToInt16s(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToInt32s$
-func TestConvertToInt32s(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToInt32s(strs)
+// go test -v -cover -run=^TestStringsInt32s$
+func TestStringsInt32s(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Int32s()
 	if err == nil {
 		t.Fatalf("convertToInt32s returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToInt32s(strs)
+	result, err = strs.Int32s()
 	if err != nil {
 		t.Fatalf("convertToInt32s returns wrong err of strs %+v", strs)
 	}
@@ -102,17 +94,16 @@ func TestConvertToInt32s(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToInt64s$
-func TestConvertToInt64s(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToInt64s(strs)
+// go test -v -cover -run=^TestStringsInt64s$
+func TestStringsInt64s(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Int64s()
 	if err == nil {
 		t.Fatalf("convertToInt64s returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToInt64s(strs)
+	result, err = strs.Int64s()
 	if err != nil {
 		t.Fatalf("convertToInt64s returns wrong err of strs %+v", strs)
 	}
@@ -125,17 +116,16 @@ func TestConvertToInt64s(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToUints$
-func TestConvertToUints(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToUints(strs)
+// go test -v -cover -run=^TestStringsUints$
+func TestStringsUints(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Uints()
 	if err == nil {
 		t.Fatalf("convertToUints returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToUints(strs)
+	result, err = strs.Uints()
 	if err != nil {
 		t.Fatalf("convertToUints returns wrong err of strs %+v", strs)
 	}
@@ -148,17 +138,16 @@ func TestConvertToUints(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToUint8s$
-func TestConvertToUint8s(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToUint8s(strs)
+// go test -v -cover -run=^TestStringsUint8s$
+func TestStringsUint8s(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Uint8s()
 	if err == nil {
 		t.Fatalf("convertToUint8s returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToUint8s(strs)
+	result, err = strs.Uint8s()
 	if err != nil {
 		t.Fatalf("convertToUint8s returns wrong err of strs %+v", strs)
 	}
@@ -171,17 +160,16 @@ func TestConvertToUint8s(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToUint16s$
-func TestConvertToUint16s(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToUint16s(strs)
+// go test -v -cover -run=^TestStringsUint16s$
+func TestStringsUint16s(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Uint16s()
 	if err == nil {
 		t.Fatalf("convertToUint16s returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToUint16s(strs)
+	result, err = strs.Uint16s()
 	if err != nil {
 		t.Fatalf("convertToUint16s returns wrong err of strs %+v", strs)
 	}
@@ -194,17 +182,16 @@ func TestConvertToUint16s(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToUint32s$
-func TestConvertToUint32s(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToUint32s(strs)
+// go test -v -cover -run=^TestStringsUint32s$
+func TestStringsUint32s(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Uint32s()
 	if err == nil {
 		t.Fatalf("convertToUint32s returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToUint32s(strs)
+	result, err = strs.Uint32s()
 	if err != nil {
 		t.Fatalf("convertToUint32s returns wrong err of strs %+v", strs)
 	}
@@ -217,17 +204,16 @@ func TestConvertToUint32s(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToUint64s$
-func TestConvertToUint64s(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToUint64s(strs)
+// go test -v -cover -run=^TestStringsUint64s$
+func TestStringsUint64s(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Uint64s()
 	if err == nil {
 		t.Fatalf("convertToUint64s returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToUint64s(strs)
+	result, err = strs.Uint64s()
 	if err != nil {
 		t.Fatalf("convertToUint64s returns wrong err of strs %+v", strs)
 	}
@@ -240,17 +226,16 @@ func TestConvertToUint64s(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToFloat32s$
-func TestConvertToFloat32s(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToFloat32s(strs)
+// go test -v -cover -run=^TestStringsFloat32s$
+func TestStringsFloat32s(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Float32s()
 	if err == nil {
 		t.Fatalf("convertToFloat32s returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToFloat32s(strs)
+	result, err = strs.Float32s()
 	if err != nil {
 		t.Fatalf("convertToFloat32s returns wrong err of strs %+v", strs)
 	}
@@ -263,17 +248,16 @@ func TestConvertToFloat32s(t *testing.T) {
 	}
 }
 
-// go test -v -cover -run=^TestConvertToFloat64s$
-func TestConvertToFloat64s(t *testing.T) {
-
-	strs := []string{"a", "b", "c"}
-	result, err := convertToFloat64s(strs)
+// go test -v -cover -run=^TestStringsFloat64s$
+func TestStringsFloat64s(t *testing.T) {
+	strs := Strings([]string{"a", "b", "c"})
+	result, err := strs.Float64s()
 	if err == nil {
 		t.Fatalf("convertToFloat64s returns wrong err of strs %+v", strs)
 	}
 
 	strs = []string{"1", "2", "3"}
-	result, err = convertToFloat64s(strs)
+	result, err = strs.Float64s()
 	if err != nil {
 		t.Fatalf("convertToFloat64s returns wrong err of strs %+v", strs)
 	}

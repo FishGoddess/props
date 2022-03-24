@@ -1,10 +1,6 @@
-// Copyright 2021 Ye Zi Jie.  All rights reserved.
+// Copyright 2021 FishGoddess.  All rights reserved.
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
-//
-// Author: FishGoddess
-// Email: fishgoddess@qq.com
-// Created at 2021/07/06 00:00:52
 
 /*
 Package props provides an easy way to use foundation for your properties operations.
@@ -119,5 +115,5 @@ package props // import "github.com/FishGoddess/props"
 
 const (
 	// Version is the version string representation of props.
-	Version = "v0.2.0"
+	Version = "v0.3.0-alpha"
 )
