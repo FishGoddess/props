@@ -4,12 +4,16 @@
 
 package props
 
+import "sync"
+
 const (
 	defaultMapCapacity = 16
 )
 
 type Props struct {
 	entries map[string]Value
+
+	lock sync.RWMutex
 }
 
 func New() *Props {
@@ -20,19 +24,34 @@ func New() *Props {
 	return props
 }
 
-func NewFromMap(entries map[string]Value) *Props {
-	props := New()
-	for key, value := range entries {
-		props.Set(key, value)
-	}
-
-	return props
-}
-
 func (p *Props) Get(key string) Value {
+	p.lock.RLock()
+	defer p.lock.RUnlock()
+
 	return p.entries[key]
 }
 
 func (p *Props) Set(key string, value Value) {
+	p.lock.Lock()
+	defer p.lock.Unlock()
+
 	p.entries[key] = value
+}
+
+func (p *Props) Delete(key string) {
+	p.lock.Lock()
+	defer p.lock.Unlock()
+
+	delete(p.entries, key)
+}
+
+func (p *Props) List(f func(key string, value Value) (finished bool)) {
+	p.lock.RLock()
+	defer p.lock.RUnlock()
+
+	for key, value := range p.entries {
+		if finished := f(key, value); finished {
+			break
+		}
+	}
 }

@@ -14,27 +14,6 @@ func TestNew(t *testing.T) {
 	}
 }
 
-// go test -v -cover -count=1 -test.cpu=1 -run=^TestNewFromMap$
-func TestNewFromMap(t *testing.T) {
-	entries := map[string]Value{
-		"k1": Value("v1"),
-		"k2": Value("v2"),
-		"k3": Value("v3"),
-	}
-
-	props := NewFromMap(entries)
-	if len(props.entries) != len(entries) {
-		t.Fatalf("len(props.entries) %d != len(entries) %d", len(props.entries), len(entries))
-	}
-
-	for key, value := range entries {
-		got := props.entries[key]
-		if got != value {
-			t.Fatalf("got %s != value %s", got, value)
-		}
-	}
-}
-
 // go test -v -cover -count=1 -test.cpu=1 -run=^TestPropsGet$
 func TestPropsGet(t *testing.T) {
 	key := "k"
@@ -73,5 +52,57 @@ func TestPropsSet(t *testing.T) {
 
 	if got != value {
 		t.Fatalf("got %s != value %s", got, value)
+	}
+}
+
+// go test -v -cover -count=1 -test.cpu=1 -run=^TestPropsDelete$
+func TestPropsDelete(t *testing.T) {
+	key := "k"
+	value := Value("v")
+
+	props := New()
+	props.entries[key] = value
+	props.Delete(key)
+
+	_, ok := props.entries[key]
+	if ok {
+		t.Fatalf("delete key %s still found", key)
+	}
+}
+
+// go test -v -cover -count=1 -test.cpu=1 -run=^TestPropsList$
+func TestPropsList(t *testing.T) {
+	entries := map[string]Value{
+		"k1": Value("v1"),
+		"k2": Value("v2"),
+		"k3": Value("v3"),
+	}
+
+	props := New()
+	props.entries = entries
+
+	checkMap := make(map[string]int, len(entries))
+	props.List(func(key string, value Value) (finished bool) {
+		got, ok := entries[key]
+		if !ok {
+			t.Fatalf("key %s not found", key)
+		}
+
+		if got != value {
+			t.Fatalf("got %s != value %s", got, value)
+		}
+
+		checkMap[key] = 1
+		return false
+	})
+
+	for key := range entries {
+		checkMap[key] = checkMap[key] - 1
+	}
+
+	for key, count := range checkMap {
+		if count != 0 {
+			t.Fatalf("key %s count %d s wrong", key, count)
+		}
 	}
 }
