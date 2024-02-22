@@ -106,3 +106,19 @@ func TestPropsList(t *testing.T) {
 		}
 	}
 }
+
+// go test -v -cover -count=1 -test.cpu=1 -run=^TestPropsCount$
+func TestPropsCount(t *testing.T) {
+	entries := map[string]Value{
+		"k1": Value("v1"),
+		"k2": Value("v2"),
+		"k3": Value("v3"),
+	}
+
+	props := New()
+	props.entries = entries
+
+	if props.Count() != len(entries) {
+		t.Fatalf("props.Count() %d != len(entries) %d", props.Count(), len(entries))
+	}
+}

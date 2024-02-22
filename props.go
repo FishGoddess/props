@@ -55,3 +55,10 @@ func (p *Props) List(f func(key string, value Value) (finished bool)) {
 		}
 	}
 }
+
+func (p *Props) Count() int {
+	p.lock.RLock()
+	defer p.lock.RUnlock()
+
+	return len(p.entries)
+}
