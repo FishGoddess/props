@@ -1,39 +1,43 @@
-// Copyright 2021 Ye Zi Jie.  All rights reserved.
+// Copyright 2024 FishGoddess. All rights reserved.
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
-//
-// Author: FishGoddess
-// Email: fishgoddess@qq.com
-// Created at 2021/07/04 23:00:16
 
 package props
 
 import (
 	"io"
-	"io/ioutil"
+	"os"
 )
 
-// Load loads properties from string and returns an error if failed.
-func Load(data string) (*Properties, error) {
-	return parseFromString(data)
+func LoadMap(entries map[string]Value) *Props {
+	props := New()
+	for key, value := range entries {
+		props.Set(key, value)
+	}
+
+	return props
 }
 
-// LoadFrom loads properties from io.Reader and returns an error if failed.
-func LoadFrom(reader io.Reader) (*Properties, error) {
-
-	data, err := ioutil.ReadAll(reader)
+func LoadReader(reader io.Reader) (*Props, error) {
+	bs, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, err
 	}
-	return Load(string(data))
-}
 
-// LoadFromFile loads properties from file and returns an error if failed.
-func LoadFromFile(file string) (*Properties, error) {
-
-	data, err := ioutil.ReadFile(file)
+	m, err := parse(string(bs))
 	if err != nil {
 		return nil, err
 	}
-	return Load(string(data))
+
+	return LoadMap(m), nil
+}
+
+func LoadFile(file string) (*Props, error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return nil, err
+	}
+
+	defer f.Close()
+	return LoadReader(f)
 }

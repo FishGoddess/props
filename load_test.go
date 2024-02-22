@@ -1,108 +1,105 @@
-// Copyright 2021 Ye Zi Jie.  All rights reserved.
+// Copyright 2024 FishGoddess. All rights reserved.
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
-//
-// Author: FishGoddess
-// Email: fishgoddess@qq.com
-// Created at 2021/07/04 23:00:16
 
 package props
 
 import (
-	"fmt"
-	"io"
-	"io/ioutil"
 	"os"
-	"strconv"
+	"path/filepath"
+	"strings"
 	"testing"
 )
 
-// prepareTestFile prepares one file for testing.
-func prepareTestFile() (*os.File, error) {
-
-	file, err := ioutil.TempFile("", "load_test_*.properties")
-	if err != nil {
-		return nil, err
+// go test -v -cover -count=1 -test.cpu=1 -run=^TestLoadMap$
+func TestLoadMap(t *testing.T) {
+	entries := map[string]Value{
+		"k1": Value("v1"),
+		"k2": Value("v2"),
+		"k3": Value("v3"),
 	}
 
-	_, err = file.WriteString("key1 = value1\r\n# comment...\nkey2= value2\nkey3=value3\r\n")
-	if err != nil {
-		return nil, err
+	props := LoadMap(entries)
+	if len(props.entries) != len(entries) {
+		t.Fatalf("len(props.entries) %d != len(entries) %d", len(props.entries), len(entries))
 	}
 
-	file.Seek(0, io.SeekStart)
-	return file, nil
-}
-
-// checkProperties checks this properties and returns an error if failed.
-func checkProperties(properties *Properties) error {
-
-	data := properties.data
-	if len(data) != 3 {
-		return fmt.Errorf("len of data (%d) is wrong", len(data))
-	}
-
-	for i := 1; i <= 3; i++ {
-		index := strconv.Itoa(i)
-		if value, ok := data["key"+index]; !ok || value.String("") != "value"+index {
-			return fmt.Errorf("value of key%s (%s) is wrong", index, value)
+	for key, value := range entries {
+		got := props.entries[key]
+		if got != value {
+			t.Fatalf("got %s != value %s", got, value)
 		}
 	}
-	return nil
 }
 
-// go test -v -cover -run=^TestLoad$
-func TestLoad(t *testing.T) {
+// go test -v -cover -count=1 -test.cpu=1 -run=^TestLoadReader$
+func TestLoadReader(t *testing.T) {
+	str := "# xxx\r\n  k1    =     v1  \r\nk2    =     v2\r\nk3=v3\r\nk4=v4\nk5=v5"
+	reader := strings.NewReader(str)
 
-	data := "key1 = value1\r\n# comment...\nkey2= value2\nkey3=value3\r\n"
+	want := map[string]string{
+		"k1": "v1",
+		"k2": "v2",
+		"k3": "v3",
+		"k4": "v4",
+		"k5": "v5",
+	}
 
-	properties, err := Load(data)
+	props, err := LoadReader(reader)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if err = checkProperties(properties); err != nil {
-		t.Fatal(err)
+	if len(props.entries) != len(want) {
+		t.Fatalf("props.entries len %d != want len %d", len(props.entries), len(want))
+	}
+
+	for wantKey, wantValue := range want {
+		value, ok := props.entries[wantKey]
+		if !ok {
+			t.Fatalf("key %s not found", wantKey)
+		}
+
+		if value.String() != wantValue {
+			t.Fatalf("value %s is wrong", value)
+		}
 	}
 }
 
-// go test -v -cover -run=^TestLoadFrom$
-func TestLoadFrom(t *testing.T) {
+// go test -v -cover -count=1 -test.cpu=1 -run=^TestLoadFile$
+func TestLoadFile(t *testing.T) {
+	str := "# xxx\r\n  k1    =     v1  \r\nk2    =     v2\r\nk3=v3\r\nk4=v4\nk5=v5"
+	file := filepath.Join(t.TempDir(), t.Name())
 
-	file, err := prepareTestFile()
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer file.Close()
-
-	t.Log("test file is", file.Name())
-	properties, err := LoadFrom(file)
-	if err != nil {
+	if err := os.WriteFile(file, []byte(str), 0644); err != nil {
 		t.Fatal(err)
 	}
 
-	if err = checkProperties(properties); err != nil {
-		t.Fatal(err)
+	want := map[string]string{
+		"k1": "v1",
+		"k2": "v2",
+		"k3": "v3",
+		"k4": "v4",
+		"k5": "v5",
 	}
-}
 
-// go test -v -cover -run=^TestLoadFromFile$
-func TestLoadFromFile(t *testing.T) {
-
-	file, err := prepareTestFile()
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer file.Close()
-
-	fileName := file.Name()
-	t.Log("test file is", fileName)
-	properties, err := LoadFromFile(fileName)
+	props, err := LoadFile(file)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if err = checkProperties(properties); err != nil {
-		t.Fatal(err)
+	if len(props.entries) != len(want) {
+		t.Fatalf("props.entries len %d != want len %d", len(props.entries), len(want))
+	}
+
+	for wantKey, wantValue := range want {
+		value, ok := props.entries[wantKey]
+		if !ok {
+			t.Fatalf("key %s not found", wantKey)
+		}
+
+		if value.String() != wantValue {
+			t.Fatalf("value %s is wrong", value)
+		}
 	}
 }

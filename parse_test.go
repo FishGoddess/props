@@ -1,49 +1,101 @@
-// Copyright 2021 Ye Zi Jie.  All rights reserved.
+// Copyright 2024 FishGoddess. All rights reserved.
 // Use of this source code is governed by a MIT style
 // license that can be found in the LICENSE file.
-//
-// Author: FishGoddess
-// Email: fishgoddess@qq.com
-// Created at 2021/07/04 23:00:16
 
 package props
 
 import "testing"
 
-// go test -v -cover -run=^TestParseFromString$
-func TestParseFromString(t *testing.T) {
+// go test -v -cover -run=^TestParseLine$
+func TestParseLine(t *testing.T) {
+	key, value, err := parseLine(1, "  error  ")
+	if err == nil {
+		t.Fatal("parse error line returns nil")
+	}
 
-	properties, err := parseFromString("key1=value1\nkey2=value2\nkey3=value3\n")
+	key, value, err = parseLine(1, "  key      =                value  \r\n")
 	if err != nil {
-		t.Fatalf("parseFromString returns an error %+v", err)
+		t.Fatal(err)
 	}
 
-	value := properties.Get("key1").String("")
-	if value != "value1" {
-		t.Fatalf("get key1 returns wrong result %s", value)
+	if key != "key" {
+		t.Fatalf("key %s is wrong", key)
 	}
 
-	value = properties.Get("key2").String("")
-	if value != "value2" {
-		t.Fatalf("get key2 returns wrong result %s", value)
-	}
-
-	value = properties.Get("key3").String("")
-	if value != "value3" {
-		t.Fatalf("get key3 returns wrong result %s", value)
+	if value != "value" {
+		t.Fatalf("value %s is wrong", value)
 	}
 }
 
-// go test -v -cover -run=^TestParseFromProperties$
-func TestParseFromProperties(t *testing.T) {
+// go test -v -cover -run=^TestParseLine$
+func TestParseLines(t *testing.T) {
+	lines := []string{
+		"# xxx",
+		"  k1    =     v1  \r\n",
+		"k2    =     v2\r\n",
+		"k3=v3\r\n",
+		"k4=v4\n",
+		"k5=v5",
+	}
 
-	properties := NewProperties()
-	properties.Set("key1", "value1")
-	properties.Set("key2", "value2")
-	properties.Set("key3", "value3")
+	want := map[string]string{
+		"k1": "v1",
+		"k2": "v2",
+		"k3": "v3",
+		"k4": "v4",
+		"k5": "v5",
+	}
 
-	str := parseFromProperties(properties)
-	if str != "key1=value1\nkey2=value2\nkey3=value3\n" {
-		t.Fatalf("parseFromProperties returns wrong result %s", str)
+	entries, err := parseLines(lines)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(entries) != len(want) {
+		t.Fatalf("entries len %d != want len %d", len(entries), len(want))
+	}
+
+	for wantKey, wantValue := range want {
+		value, ok := entries[wantKey]
+		if !ok {
+			t.Fatalf("key %s not found", wantKey)
+		}
+
+		if value.String() != wantValue {
+			t.Fatalf("value %s is wrong", value)
+		}
+	}
+}
+
+// go test -v -cover -run=^TestParse$
+func TestParse(t *testing.T) {
+	str := "# xxx\r\n  k1    =     v1  \r\nk2    =     v2\r\nk3=v3\r\nk4=v4\nk5=v5"
+
+	want := map[string]string{
+		"k1": "v1",
+		"k2": "v2",
+		"k3": "v3",
+		"k4": "v4",
+		"k5": "v5",
+	}
+
+	entries, err := parse(str)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(entries) != len(want) {
+		t.Fatalf("entries len %d != want len %d", len(entries), len(want))
+	}
+
+	for wantKey, wantValue := range want {
+		value, ok := entries[wantKey]
+		if !ok {
+			t.Fatalf("key %s not found", wantKey)
+		}
+
+		if value.String() != wantValue {
+			t.Fatalf("value %s is wrong", value)
+		}
 	}
 }
